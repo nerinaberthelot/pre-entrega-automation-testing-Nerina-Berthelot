@@ -1,27 +1,19 @@
-"""test_login_valid
-    open SauceDemo
-    login with valid user
-    validate URL contains /inventory.html"""
+"""Helper functions for tests"""
 
-import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from utils.helpers import wait_for_inventory_page
 
-def test_login_valid(driver):
-    #Open SauceDemo
+def login(driver):
+    #Login to SauceDemo with given username and password
     driver.get("https://www.saucedemo.com")
-    
-    #Login with valid user
     driver.find_element(By.ID, "user-name").send_keys("standard_user")
     driver.find_element(By.ID, "password").send_keys("secret_sauce")
     driver.find_element(By.ID, "login-button").click()
 
-    wait_for_inventory_page(driver)
 
-    #Validate URL contains /inventory.html
-    assert "/inventory.html" in driver.current_url
-
-
-
+def wait_for_inventory_page(driver):
+    #Wait for the inventory page to load and validate URL
+    WebDriverWait(driver, 5).until(
+        EC.url_contains("/inventory.html")
+    )
